@@ -1,2 +1,2 @@
 def main(*args, **kwargs):
-    return "Hello World!"
+    return "Hello Universe!"
