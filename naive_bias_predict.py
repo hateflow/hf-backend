@@ -5,7 +5,7 @@ import os
 
 nltk.download('punkt')
 LABELS = "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"
-CURRENT_DIR = os.path.abspath(__file__)
+CURRENT_DIR = "/".join(__file__.split("/")[:-1])
 
 
 def predict(data):
@@ -18,7 +18,7 @@ def predict(data):
     for label in LABELS:
         try:
             try:
-                with open(f"{CURRENT_DIR}/{label}.pickle", "rb") as f:
+                with open(f"{CURRENT_DIR}/models/{label}.pickle", "rb") as f:
                     vectorizer, model = pickle.load(f)
             except OSError as e:
                 res['errors'].append(f"could not load model for label '{label}': {e}")
