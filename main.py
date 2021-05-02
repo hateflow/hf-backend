@@ -1,6 +1,10 @@
 from flask import request
 
-from . import naive_bias_predict
+try:
+    from . import naive_bias_predict
+except ImportError:
+    import naive_bias_predict
+
 
 def main(*args, **kwargs):
     params: dict = request.args  # übergebene Parameter als Dictionary
