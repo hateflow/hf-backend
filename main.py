@@ -1,5 +1,9 @@
 from flask import request
-from naive_bias_predict import predict
+
+try:
+    from .naive_bias_predict import predict
+except ImportError:
+    from naive_bias_predict import predict
 
 
 def main(*args, **kwargs):
