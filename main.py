@@ -6,10 +6,22 @@ except ImportError:
     import naive_bias_predict
 
 
-def main(*args, **kwargs):
-    params: dict = request.args  # übergebene Parameter als Dictionary
+def main(*args, **kwargs) -> (dict, int):
+    res = {
+        'results': dict(),
+        'errors': [],
+        'warnings': [],
+    }
+
+    params: dict = request.args  # parameters passed in the HTTP request
     text = params.get("text")
     if text is None:
-        return "No text submitted", 400
+        res['errors'] = "no text submitted"
+        return res, 400
 
-    return naive_bias_predict.predict([text])
+    results, errors, warnings = naive_bias_predict.predict([text])
+    res['results'].update(results)
+    res['errors'].append(errors)
+    res['warnings'].append(warnings)
+
+    return res, 200
