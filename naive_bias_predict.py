@@ -26,7 +26,7 @@ def predict(data):
                 res['errors'].append(f"unknown exception while loading label '{label}': {e}")
             else:
                 y_pred = model.predict(vectorizer.transform(data))
-                res['result'][label] = y_pred
+                res['results'][label] = y_pred
         except Exception as e:
             res['errors'].append(f"unknown exception while processing label '{label}': {e}")
     return res
