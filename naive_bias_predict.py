@@ -25,7 +25,7 @@ def predict(data: List[str], probabilities=None) -> (dict, list, list):
                     y_pred = model.predict_proba(vectorizer.transform(data))
                 else:
                     y_pred = model.predict(vectorizer.transform(data))
-                results[label] = y_pred[0].item()
+                results[label] = y_pred[0][0].item()
         except Exception as e:
             errors.append(f"unknown exception while processing label '{label}': {e}")
     return results, errors, warnings
