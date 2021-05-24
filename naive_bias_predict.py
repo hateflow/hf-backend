@@ -22,10 +22,10 @@ def predict(data: List[str], probabilities=None) -> (dict, list, list):
                 errors.append(f"unknown exception while loading label '{label}': {e}")
             else:
                 if probabilities:
-                    y_pred = model.predict_proba(vectorizer.transform(data))
+                    y_pred = model.predict_proba(vectorizer.transform(data))[0][0]
                 else:
-                    y_pred = model.predict(vectorizer.transform(data))
-                results[label] = y_pred[0][0].item()
+                    y_pred = model.predict(vectorizer.transform(data))[0]
+                results[label] = y_pred.item()
         except Exception as e:
             errors.append(f"unknown exception while processing label '{label}': {e}")
     return results, errors, warnings
