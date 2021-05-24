@@ -19,7 +19,7 @@ def main(*args, **kwargs) -> (dict, int):
         res['errors'] = "no text submitted"
         return res, 400
 
-    results, errors, warnings = naive_bias_predict.predict([text])
+    results, errors, warnings = naive_bias_predict.predict([text], probabilities=params.get("probabilities"))
     res['results'].update(results)
     res['errors'].append(errors)
     res['warnings'].append(warnings)

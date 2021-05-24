@@ -8,7 +8,7 @@ LABELS = "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"
 CURRENT_DIR = "/".join(__file__.split("/")[:-1])
 
 
-def predict(data: List[str]) -> (dict, list, list):
+def predict(data: List[str], probabilities=None) -> (dict, list, list):
     results, errors, warnings = dict(), [], []
 
     for label in LABELS:
@@ -21,7 +21,10 @@ def predict(data: List[str]) -> (dict, list, list):
             except Exception as e:
                 errors.append(f"unknown exception while loading label '{label}': {e}")
             else:
-                y_pred = model.predict(vectorizer.transform(data))
+                if probabilities:
+                    y_pred = model.predict_proba(vectorizer.transform(data))
+                else:
+                    y_pred = model.predict(vectorizer.transform(data))
                 results[label] = y_pred.item()
         except Exception as e:
             errors.append(f"unknown exception while processing label '{label}': {e}")
