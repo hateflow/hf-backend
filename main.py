@@ -1,3 +1,6 @@
+import os
+from threading import Timer
+
 import requests
 from flask import Flask, request
 from flask_cors import CORS
@@ -15,20 +18,9 @@ def main():
 
     @app.route("/git/neseps/webhook", methods=["POST"])
     def update_git():
-        return
-        Repo("/home/JSchoedl/site/neseps").remotes.origin.pull()
-        Repo("/home/JSchoedl/site/neseps-docs").remotes.origin.pull()
-        # Repo.clone_from("https://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@github.com/jschoedl/neseps.git", "neseps")
-
-        username = 'JSchoedl'
-        token = '06b26af687480abff2701135ce4906fde5cb3af9'
-        domain_name = "JSchoedl.eu.pythonanywhere.com"
-
-        res = requests.post(
-            f"https://eu.pythonanywhere.com/api/v0/user/{username}/webapps/{domain_name}/reload/",
-            headers={'Authorization': f'Token {token}'}
-        )
-        return res
+        Repo("/root/neseps").remotes.origin.pull()
+        Timer(0.01, lambda: os.system("service apache2 restart")).start()
+        return "git pull successful, restarting Apache..", 200
 
     @app.route("/<api_request>")
     def neseps_api(api_request):
@@ -52,6 +44,7 @@ def main():
         return res, 200
 
     return app
+
 
 app = main()
 if __name__ == "__main__":
