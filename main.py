@@ -30,7 +30,7 @@ def main():
         )
         return res
 
-    @app.route("/api/<api_request>")
+    @app.route("/<api_request>")
     def neseps_api(api_request):
         res = {
             'results': dict(),
