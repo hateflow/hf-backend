@@ -1,6 +1,4 @@
 import sys
 
-sys.path.insert(0, '/var/www/html/neseps')
-import main
-
-application = main.app
+sys.path.append('/var/www/neseps/neseps')
+from main import app as application
