@@ -48,7 +48,7 @@ def predict(data: List[str], probabilities: bool = None, thresholds: dict = None
             y_pred = model.predict_proba(vectorizer.transform(data))[:, 1]
             if not probabilities:
                 threshold = thresholds.get(label) or DEFAULT_THRESHOLDS[label]
-                y_pred = y_pred > threshold
+                y_pred = (y_pred > threshold) * 1.
             results[label] = y_pred.item()
         except Exception as e:
             errors.append(f"unknown exception while processing label '{label}': {e}")
