@@ -7,12 +7,12 @@ from flask_cors import CORS
 from git import Repo
 
 try:
-    from . import naive_bias_predict
-except ImportError:
     try:
+        from . import naive_bias_predict
+    except ImportError:
         import naive_bias_predict
-    except ImportError as e:
-        logging.critical(f"Could not import naive_bias_predict: {e}")
+except Exception as e:
+    logging.critical(f"Could not import naive_bias_predict: {e}")
 
 
 def main():
