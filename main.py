@@ -1,7 +1,6 @@
 import os
 from threading import Timer
 
-import requests
 from flask import Flask, request
 from flask_cors import CORS
 from git import Repo
