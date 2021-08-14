@@ -36,7 +36,11 @@ def main():
             res['errors'] = "no text submitted"
             return res, 400
 
-        results, errors, warnings = naive_bias_predict.predict([text], probabilities=params.get("probabilities"))
+        results, errors, warnings = naive_bias_predict.predict(
+            [text],
+            probabilities=params.get("probabilities"),
+            thresholds=params.get("thresholds"),
+        )
         res['results'].update(results)
         res['errors'].append(errors)
         res['warnings'].append(warnings)
