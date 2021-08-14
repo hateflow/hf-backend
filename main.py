@@ -1,3 +1,4 @@
+import logging
 import os
 from threading import Timer
 
@@ -8,7 +9,10 @@ from git import Repo
 try:
     from . import naive_bias_predict
 except ImportError:
-    import naive_bias_predict
+    try:
+        import naive_bias_predict
+    except ImportError as e:
+        logging.critical(f"Could not import naive_bias_predict: {e}")
 
 
 def main():
