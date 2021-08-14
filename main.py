@@ -15,6 +15,10 @@ def main():
     app = Flask(__name__)
     CORS(app)
 
+    @app.route("/ping")
+    def ping():
+        return "pong"
+
     @app.route("/git/neseps/webhook", methods=["POST"])
     def update_git():
         Repo("/root/neseps").remotes.origin.pull()
