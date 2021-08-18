@@ -1,6 +1,5 @@
 import os
 import pickle
-from multiprocessing import Pool
 
 import nltk
 import pandas as pd
@@ -31,27 +30,14 @@ def preprocess_comment(args):
     return " ".join(tokenized_comment)
 
 
-def text_preprocess(data, stemmer):
-    # unused
-    res = []
-    with Pool() as pool:
-        res += pool.map_async(preprocess_comment,
-                              ((comment, stemmer) for comment in data),
-                              chunksize=int(len(data) / os.cpu_count())
-                              ).get()
-    return res
-
-
-def fit_model(args):
-    x_train_vectorized, y_train, label_index = args
-
+def fit_model(x_train_vectorized, y_train, label_index):
     model = MultinomialNB()
     model.fit(x_train_vectorized, y_train[label_index])
 
     with open(f"models/{LABELS[label_index]}.pickle", "wb") as f:
         pickle.dump(model, f)
 
-    return model  # .score(x_test_vectorized, y_test[label_index])
+    return model
 
 
 def plot_threshold_scores(label_index, model: MultinomialNB, x_test_vectorized, y_test):
@@ -85,28 +71,30 @@ def plot_threshold_scores(label_index, model: MultinomialNB, x_test_vectorized, 
 
     plt.legend()
     plt.title(LABELS[label_index])
-    plt.savefig(LABELS[label_index])
+    plt.xlabel("Threshold")
+    plt.ylabel("Score")
+    os.makedirs("plots", exist_ok=True)
+    plt.savefig(f"plots/{LABELS[label_index]}.jpg")
 
 
 def main():
-    x_test_start, y_test_start = load("test_pretty.csv", max_lines=159_571)
+    x_test, y_test = load("test_pretty.csv", max_lines=159_571)
     x_train, y_train = load("train_pretty.csv", max_lines=159_571)
-
-    # stemmer = SnowballStemmer("english")
-    # x_train = text_preprocess(x_train, stemmer)
-    # x_test = text_preprocess(x_test_start, stemmer)
 
     vectorizer = CountVectorizer(max_features=5000)
     x_train_vectorized = vectorizer.fit_transform(x_train)
-    x_test_vectorized = vectorizer.transform(x_test_start)
+    x_test_vectorized = vectorizer.transform(x_test)
     with open("models/vectorizer.pickle", "wb") as f:
         pickle.dump(vectorizer, f)
 
-    with Pool() as pool:
-        new_scores = pool.map_async(fit_model,
-                                    [(x_train_vectorized, y_train, label_index) for label_index in range(len(LABELS))])
-        for label_index, model in enumerate(new_scores.get()):
-            plot_threshold_scores(label_index, model, x_test_vectorized, y_test_start)
+    models = []
+    for label_index, label in enumerate(LABELS):
+        model = fit_model(x_train_vectorized, y_train, label_index)
+        print(f"{label}: {model.score(x_test_vectorized, y_test[label_index])}")
+        models.append(model)
+
+    for label_index, model in enumerate(models):
+        plot_threshold_scores(label_index, model, x_test_vectorized, y_test)
 
 
 if __name__ == '__main__':
