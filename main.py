@@ -1,10 +1,7 @@
 import logging
-import os
-from threading import Timer
 
 from flask import Flask, request
 from flask_cors import CORS
-from git import Repo
 
 try:
     try:
@@ -12,22 +9,12 @@ try:
     except ImportError:
         import nn_predict
 except Exception as e:
-    logging.critical(f"Could not import naive_bias_predict: {e}")
+    logging.critical(f"Could not import nn_predict: {e}")
 
 
 def main():
     app = Flask(__name__)
     CORS(app)
-
-    @app.route("/ping")
-    def ping():
-        return "pong"
-
-    @app.route("/git/neseps/webhook", methods=["POST"])
-    def update_git():
-        Repo("/root/neseps").remotes.origin.pull()
-        Timer(0.01, lambda: os.system("service apache2 restart")).start()
-        return "git pull successful, restarting Apache..", 200
 
     @app.route("/<api_request>")
     def neseps_api(api_request):
