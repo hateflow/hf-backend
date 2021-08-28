@@ -8,12 +8,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import MultinomialNB
 
-nltk.download('punkt')
 LABELS = "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"
 
 
 def load(path, max_lines=10000):
-    df = pd.read_csv(path)[-max_lines:]  # 159571 Einträge insgesamt
+    df = pd.read_csv(path)[-max_lines:]  # 159571 lines
     x = df['comment_text']
     y = [df[i] for i in LABELS]
     return x, y
@@ -78,6 +77,7 @@ def plot_threshold_scores(label_index, model: MultinomialNB, x_test_vectorized, 
 
 
 def main():
+    nltk.download('punkt')
     x_test, y_test = load("test_pretty.csv", max_lines=159_571)
     x_train, y_train = load("train_pretty.csv", max_lines=159_571)
 

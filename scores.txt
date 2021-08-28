@@ -1,0 +1,7 @@
+               NB    NN  diff
+identity_hate .872  .884 +.012
+insult        .849  .872 +.023
+obscene       .863  .867 +.004
+severe_toxic  .879  .927 +.048
+threat        .906  .797 -.109
+toxic         .850  .856 +.006

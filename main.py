@@ -8,9 +8,9 @@ from git import Repo
 
 try:
     try:
-        from . import naive_bias_predict
+        from . import nn_predict
     except ImportError:
-        import naive_bias_predict
+        import nn_predict
 except Exception as e:
     logging.critical(f"Could not import naive_bias_predict: {e}")
 
@@ -43,7 +43,7 @@ def main():
             res['errors'] = "no text submitted"
             return res, 400
 
-        results, errors, warnings = naive_bias_predict.predict(
+        results, errors, warnings = nn_predict.predict(
             [text],
             probabilities=params.get("probabilities"),
             thresholds=params.get("thresholds"),
