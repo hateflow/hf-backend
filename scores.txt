@@ -1,7 +1,17 @@
-               NB    NN  diff
-identity_hate .872  .884 +.012
-insult        .849  .872 +.023
-obscene       .863  .867 +.004
-severe_toxic  .879  .927 +.048
-threat        .906  .797 -.109
-toxic         .850  .856 +.006
+               NB   ReLU LeakyReLU Tanh
+toxic         .850  .856 .853      .846
+severe_toxic  .879  .927 .912      .900
+obscene       .863  .867 .826      .851
+threat        .906  .797 .749      .842
+insult        .849  .872 .867      .858
+identity_hate .872  .884 .875      .844
+
+               NB   500E   1kE  1k5E   2kE  2k5E   3kE
+toxic         .850  .856  .858 !.858! .856  .855  .857
+severe_toxic  .879  .925  .933 !.935! .930  .931  .932
+obscene       .863  .868  .869 !.869! .866  .864  .862
+threat        .906  .813  .886  .908  .918 !.924!  .918
+insult        .849  .870 !.874! .873  .872  .872  .870
+identity_hate .872  .884  .896 !.897! .892  .887  .886
+average       .8798 .8693 .8860 .8900 .8890 .8888 .8875
+                                  ^ best

@@ -64,6 +64,7 @@ def preprocess(comments: list, workers: int = None):
     return tokenized, removed_indices
 
 
+print("Loading libraries...")
 nltk.download("punkt")
 nltk.download("stopwords")
 corpus = gensim_api.load("glove-twitter-200")
