@@ -1,3 +1,5 @@
+# HateFlow backend
+HateFlow can detect and inappropriate comments. It is available using an API documented [here](https://jschoedl.eu.pythonanywhere.com/docs/neseps/).
 ## Installation
 (tested on Ubuntu 20.04 and Python 3.8)
 
