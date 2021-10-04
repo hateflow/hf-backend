@@ -33,11 +33,16 @@ Apache has to be set up according to the system specific requirements.
 <VirtualHost *:80>
                 ServerName example.org
                 ServerAdmin admin@example.org
+
+                WSGIDaemonProcess hateflow user=www-data group=www-data threads=5 home=/var/neseps/
                 WSGIScriptAlias / /var/neseps/main.wsgi
-                WSGIApplicationGroup %{GLOBAL}
+
                 <Directory /var/neseps/>
+                        WSGIProcessGroup hateflow
+                        WSGIApplicationGroup %{GLOBAL}
                         Require all granted
                 </Directory>
+
                 ErrorLog ${APACHE_LOG_DIR}/error.log
                 LogLevel warn
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
