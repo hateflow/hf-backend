@@ -35,12 +35,12 @@ def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> 
 current_dir = "/".join(__file__.split("/")[:-1])
 
 DEFAULT_THRESHOLDS = {
-    'identity_hate': 0.026,
-    'insult': 0.085,
-    'obscene': 0.103,
-    'severe_toxic': 0.039,
-    'threat': 0.005,
-    'toxic': 0.157,
+    'identity_hate': 0.018,
+    'insult': 0.05,
+    'obscene': 0.064,
+    'severe_toxic': 0.02,
+    'threat': 0.026,
+    'toxic': 0.118,
 }
 
 previous_errors = []

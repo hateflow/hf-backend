@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score
 
 from word2vec import preprocess
 
-DATASET_LINES = 159_571  # total lines: 159_571
+DATASET_LINES = 159_571  # 159_571 train lines, 63_978 test lines
 LABELS = "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"
 torch.set_num_threads(os.cpu_count())
 
@@ -43,7 +43,7 @@ def evaluate_label(x_test, y_test, label_index, label, model):
     )
 
 
-def train_model(x_train, y_train, x_test, y_test):
+def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False):
     input_dimensions, hidden = 200, 100
     model = torch.nn.Sequential(
         torch.nn.Linear(input_dimensions, hidden),
@@ -56,8 +56,8 @@ def train_model(x_train, y_train, x_test, y_test):
     optimizer = torch.optim.Adam(model.parameters())
 
     train_losses, test_losses = [], []
-    for i in range(3000):
-        if i and not i % 500:
+    for i in range(n_epochs):
+        if evaluate and i and not i % 500:
             print("#" * 20, "EVALUATION", "#" * 20)
             for label_index, label in enumerate(LABELS):
                 print(label)
