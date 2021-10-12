@@ -2,6 +2,7 @@ import os
 from multiprocessing import Pool
 
 import gensim.downloader as gensim_api
+from gensim.models import KeyedVectors
 import nltk
 import numpy as np
 import pandas as pd
@@ -67,7 +68,11 @@ def preprocess(comments: list, workers: int = None):
 print("Loading libraries...")
 nltk.download("punkt")
 nltk.download("stopwords")
-corpus = gensim_api.load("glove-twitter-200")
+if not os.path.exists(".gensim-cache"):
+    corpus = gensim_api.load("glove-twitter-200")
+    corpus.save(".gensim-cache")
+else:
+    corpus = KeyedVectors.load(".gensim-cache", mmap="r")
 english_stopwords = set(stopwords.words("english"))
 
 if __name__ == "__main__":
