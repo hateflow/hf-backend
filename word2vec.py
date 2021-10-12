@@ -20,7 +20,7 @@ def load(path, max_lines=10000):
 
 def tokenize(comment: str):
     # split into tokens
-    comment = word_tokenize(comment)
+    comment = word_tokenize(comment.lower())
     # remove punctuation and stopwords
     comment = [i for i in comment if i.isalpha() and i not in english_stopwords and i in corpus]
     return comment
