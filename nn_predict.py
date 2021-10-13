@@ -2,6 +2,15 @@ import torch
 
 from word2vec import process_chunk, LABELS
 
+DEFAULT_THRESHOLDS = {
+    'identity_hate': 0.023,
+    'insult': 0.045,
+    'obscene': 0.060,
+    'severe_toxic': 0.043,
+    'threat': 0.023,
+    'toxic': 0.121,
+}
+
 
 def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> (dict, list, list):
     results, errors, warnings = dict(), previous_errors.copy(), []
@@ -33,16 +42,6 @@ def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> 
 
 
 current_dir = "/".join(__file__.split("/")[:-1])
-
-DEFAULT_THRESHOLDS = {
-    'identity_hate': 0.018,
-    'insult': 0.05,
-    'obscene': 0.064,
-    'severe_toxic': 0.02,
-    'threat': 0.026,
-    'toxic': 0.118,
-}
-
 previous_errors = []
 
 try:
