@@ -12,8 +12,16 @@ DEFAULT_THRESHOLDS = {
 }
 
 
-def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> (dict, list, list):
+def predict(params: dict) -> (dict, list, list, int):
     results, errors, warnings = dict(), previous_errors.copy(), []
+
+    text = params.get('text')
+    if text is None:
+        errors.append("The request did not contain the required text parameter.")
+        return results, errors, warnings, 422
+
+    thresholds = params.get("thresholds")
+    probabilities = params.get("probabilities")
 
     if thresholds is None:
         thresholds = dict()
@@ -22,7 +30,7 @@ def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> 
                         "Set 'probabilities' to False for using thresholds.")
 
     try:
-        vectorized, removed_indices = process_chunk(data)
+        vectorized, removed_indices = process_chunk([text])
         if vectorized:
             vectorized = torch.tensor(vectorized, dtype=torch.float32)
             y_pred = model(vectorized)
@@ -38,7 +46,7 @@ def predict(data: list, probabilities: bool = None, thresholds: dict = None) -> 
             warnings.append("The comment did not contain any known word and could not be classified.")
     except Exception as e:
         errors.append(f"unknown exception while predicting: {e}")
-    return results, errors, warnings
+    return results, errors, warnings, 500 if errors else 200
 
 
 current_dir = "/".join(__file__.split("/")[:-1])

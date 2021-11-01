@@ -13,7 +13,7 @@ pip3 install -r requirements.txt  --no-cache-dir
 
 ## Training a model
 ```shell
-python3 nn_train.py
+python3 train.py
 ```
 
 ## Evaluating the current model
