@@ -1,7 +1,7 @@
 import torch
 
-from nn_predict import model
-from nn_train import load, LABELS
+from predict import model
+from train import load, LABELS
 from word2vec import preprocess
 
 for dataset in ("test", "train"):
