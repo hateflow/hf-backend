@@ -5,9 +5,9 @@ HateFlow can detect and classify inappropriate comments. It is available using a
 
 ```shell
 cd /var
-git clone git@github.com:jschoedl/neseps.git
+git clone git@github.com:jschoedl/hateflow.git
 sudo apt install python3-pip
-cd neseps
+cd hateflow
 pip3 install -r requirements.txt  --no-cache-dir
 ```
 
@@ -34,10 +34,10 @@ Apache has to be set up according to the system specific requirements.
                 ServerName example.org
                 ServerAdmin admin@example.org
 
-                WSGIDaemonProcess hateflow user=www-data group=www-data threads=5 home=/var/neseps/
-                WSGIScriptAlias / /var/neseps/main.wsgi
+                WSGIDaemonProcess hateflow user=www-data group=www-data threads=5 home=/var/hateflow/
+                WSGIScriptAlias / /var/hateflow/main.wsgi
 
-                <Directory /var/neseps/>
+                <Directory /var/hateflow/>
                         WSGIProcessGroup hateflow
                         WSGIApplicationGroup %{GLOBAL}
                         Require all granted
