@@ -48,3 +48,19 @@ Apache has to be set up according to the system specific requirements.
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
+
+# Using the social media bots for twitch and reddit
+## twitch
+To use the twitch bot, first create an account on twitch, request an oauth code and register an app. For a detailed description, follow the first few steps of this instruction to get the bot running:
+
+https://dev.to/ninjabunny9000/let-s-make-a-twitch-bot-with-python-2nd8
+
+Last but not least uncomment line 69 in the bot.py file to atually reply to the detected comments.
+
+
+## reddit
+To use the reddit bot, just create a reddit account, create a reddit application and paste the credentials into the redditbot.py file. For a detailed description, follow the first few steps of this instructions:
+
+https://yojji.io/blog/how-to-make-a-reddit-bot
+
+Last but not least uncomment line 41 to atually reply to the detected comments. Now you can choose between scanning a whole Subreddit with many posts or just one post. Therefore call the function scan_subreddit or scan_comment.
