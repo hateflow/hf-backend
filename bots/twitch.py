@@ -3,17 +3,19 @@ import logging
 import os
 
 import requests
+from dotenv import load_dotenv
 from twitchio.ext import commands
 
 API_URL = "http://api.hateflow.de/"
 
+load_dotenv()
 bot = commands.Bot(
     # set up the bot
-    irc_token=os.environ['TMI_TOKEN'],
-    client_id=os.environ['CLIENT_ID'],
-    nick=os.environ['BOT_NICK'],
-    prefix=os.environ['BOT_PREFIX'],
-    initial_channels=[os.environ['CHANNEL']]
+    token=os.getenv('TMI_TOKEN'),
+    client_id=os.getenv('CLIENT_ID'),
+    nick=os.getenv('BOT_NICK'),
+    prefix=os.getenv('BOT_PREFIX'),
+    initial_channels=[os.getenv('CHANNEL')]
 )
 
 
@@ -49,13 +51,18 @@ def check_comment(comment) -> (str, dict):
 
 
 @bot.event
+async def event_ready():
+    print(f"{os.environ['BOT_NICK']} is online!")
+
+
+@bot.event
 async def event_message(context):
     """Runs every time a message is sent in chat."""
     print("---------new comment---------")
     print(context.content)
 
     # make sure the bot ignores itself and the streamer
-    if context.author.name.lower() == os.environ['BOT_NICK'].lower():
+    if context.author.name.lower() == os.getenv('BOT_NICK').lower():
         return
     error, result = check_comment(context.content)
 
