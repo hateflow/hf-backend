@@ -4,9 +4,6 @@ HateFlow can detect and classify inappropriate comments. It is available using a
 (tested on Ubuntu 20.04 and Python 3.8)
 
 ```shell
-cd /var
-git clone git@github.com:jschoedl/hateflow.git
-sudo apt install python3-pip
 cd hateflow
 pip3 install -r requirements.txt  --no-cache-dir
 ```
@@ -22,6 +19,7 @@ python3 get_accuracy.py
 ```
 
 ## Hosting the API
+This section assumes an installation at /var/hateflow.
 ```shell
 sudo mkdir /var/www/nltk_data
 sudo mkdir /var/www/gensim-data
@@ -49,13 +47,17 @@ Apache has to be set up according to the system specific requirements.
 </VirtualHost>
 ```
 
-# Using the social media bots for twitch and reddit
+# Social Media Bots
+```bash
+cd hateflow/bots
+pip3 install -r requirements.txt
+```
 ## Twitch
-To use the twitch bot, first create an account on twitch, request an oauth code and register an app. For a detailed description, follow the first few steps of this instruction to get the bot running:
+1. Create an account on twitch.
+2. Request an oauth code and update bots/.env accordingly.
+3. Try running it: `python3 twitch.py`
 
-https://dev.to/ninjabunny9000/let-s-make-a-twitch-bot-with-python-2nd8
-
-Last but not least uncomment line 69 in the bot.py file to atually reply to the detected comments.
+This will start the bot in read mode. If you want to reply to detected comments, uncomment line 69 in `twitch.py`.
 
 
 ## Reddit
