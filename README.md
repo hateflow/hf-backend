@@ -48,6 +48,7 @@ Apache has to be set up according to the system specific requirements.
 ```
 
 # Social Media Bots
+## Installation
 ```bash
 cd hateflow/bots
 pip3 install -r requirements.txt
@@ -57,12 +58,14 @@ pip3 install -r requirements.txt
 2. Request an oauth code and update bots/.env accordingly.
 3. Try running it: `python3 twitch.py`
 
-This will start the bot in read mode. If you want to reply to detected comments, uncomment line 80 in `twitch.py`.
+This will start the bot in read mode. If you want to reply to detected comments, uncomment the last line of
+`event_message` in `twitch.py`.
 
 
 ## Reddit
-To use the reddit bot, just create a reddit account, create a reddit application and paste the credentials into the redditbot.py file. For a detailed description, follow the first few steps of this instructions:
+1. Create an account on reddit.
+2. Create a [reddit application](https://ssl.reddit.com/prefs/apps/) and update bots/.env accordingly.
+3. Try running it: `python3 reddit.py`
 
-https://yojji.io/blog/how-to-make-a-reddit-bot
-
-Last but not least uncomment line 41 to atually reply to the detected comments. Now you can choose between scanning a whole Subreddit with many posts or just one post. Therefore call the function scan_subreddit or scan_comment.
+This will start the bot in read mode for the Subreddit "me_irl". If you want to reply to detected comments, uncomment 
+the last line of `scan_for_comments` in `reddit.py`. You can customize the Subreddit or Post at the bottom of the file
