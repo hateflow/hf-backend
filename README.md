@@ -57,7 +57,7 @@ pip3 install -r requirements.txt
 2. Request an oauth code and update bots/.env accordingly.
 3. Try running it: `python3 twitch.py`
 
-This will start the bot in read mode. If you want to reply to detected comments, uncomment line 73 in `twitch.py`.
+This will start the bot in read mode. If you want to reply to detected comments, uncomment line 80 in `twitch.py`.
 
 
 ## Reddit
