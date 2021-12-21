@@ -22,7 +22,7 @@ for dataset in ("test", "train"):
     print(f"mindestens ein Label bei unangemessenem oder kein Label bei sachlichem Kommentar: "
           f"{n_any_correct} Kommentare / {n_any_correct / len(y_data):.3f} der Tests")
 
-    for label_index, label in enumerate(LABELS):
-        n_severe_toxic_correct = torch.sum(y_pred[:, label_index] == y_data[:, label_index]).item()
-        print(f"Label '{label}' korrekt: {n_severe_toxic_correct} Kommentare / {n_severe_toxic_correct / len(y_data):.3f} der Tests")
+    severe_toxic_index = LABELS.index("severe_toxic")
+    n_severe_toxic_correct = torch.sum(y_pred[:, severe_toxic_index] == y_data[:, severe_toxic_index]).item()
+    print(f"Label 'severe_toxic' korrekt: {n_severe_toxic_correct} Kommentare / {n_severe_toxic_correct / len(y_data):.3f} der Tests")
     print()
