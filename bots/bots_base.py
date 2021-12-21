@@ -7,7 +7,13 @@ API_URL = "http://api.hateflow.de/"
 
 
 def warning_text(properties: list) -> str:
+    """
+    Generate a warning message for the given properties.
+    """
     assert properties
+
+    if "toxic" in properties and "severe_toxic" in properties:
+        properties.remove("toxic")
 
     names = {
         'identity_hate': "identity hate",
@@ -29,6 +35,7 @@ def warning_text(properties: list) -> str:
 
 
 def check_comment(comment) -> (str, dict):
+    """Check a comment using the HateFlow API."""
     response = requests.get(f"{API_URL}simpleCheck?text={comment}")
     if response.status_code != 200:
         return f"Connection to {API_URL} failed with status code {response.status_code}.", dict()

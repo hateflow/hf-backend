@@ -2,10 +2,10 @@ import os
 from multiprocessing import Pool
 
 import gensim.downloader as gensim_api
-from gensim.models import KeyedVectors
 import nltk
 import numpy as np
 import pandas as pd
+from gensim.models import KeyedVectors
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -13,6 +13,9 @@ LABELS = "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"
 
 
 def load(path, max_lines=10000):
+    """
+    Load a dataset.
+    """
     df = pd.read_csv(path)[-max_lines:]  # 159571 lines
     x = df['comment_text']
     y = [df[i] for i in LABELS]
@@ -28,10 +31,17 @@ def tokenize(comment: str):
 
 
 def vectorize(words: list):
+    """
+    Return the arithmetic mean of vectors of all words.
+    """
     return np.mean(corpus[words], axis=0)
 
 
 def process_chunk(comments: list, starting_index=0):
+    """
+    Tokenize and vectorize the given comments.
+    (see preprocess)
+    """
     tokenized = [tokenize(comment) for comment in comments]
 
     removed_indices = filter(lambda i: not bool(tokenized[i]), range(len(tokenized)))
@@ -43,6 +53,12 @@ def process_chunk(comments: list, starting_index=0):
 
 
 def preprocess(comments: list, workers: int = None):
+    """
+    Tokenize and Vectorize the given comments in parallel.
+    :param comments: List of strings of comments
+    :param workers: number of parallel processes (default: number of CPUs)
+    :return: vectors, indices of non-classifiable comments
+    """
     if workers is None:
         workers = os.cpu_count()
 

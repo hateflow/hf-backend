@@ -1,6 +1,6 @@
 import logging
 
-from flask import Flask, request
+from flask import Flask, request, redirect
 from flask_cors import CORS
 
 try:
@@ -13,11 +13,29 @@ except Exception as e:
 
 
 def main():
-    app = Flask(__name__)
-    CORS(app)  # TODO
+    """
+    The main API function.
+
+    Receives all calls to http://api.hateflow.de.
+    :return:
+    """
+    app = Flask(__name__)  # initialize a new Flask app
+    CORS(app)  # make it accessible from all domains
+
+    @app.route("/")
+    def hf_home():
+        """
+        Redirect to hateflow.de.
+
+        Calling the root page does not correspond to any API action.
+        """
+        return redirect("https://hateflow.de", 307)
 
     @app.route("/<requested_action>")
     def hateflow_api(requested_action):
+        """
+        Map API actions with Python functions.
+        """
         res = {
             'results': dict(),
             'errors': [],
@@ -44,6 +62,7 @@ def main():
     return app
 
 
+# run the Flask app
 app = main()
 if __name__ == "__main__":
     app.run()

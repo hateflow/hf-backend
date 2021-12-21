@@ -5,8 +5,6 @@ from twitchio.ext import commands
 
 from bots_base import process_message
 
-API_URL = "http://api.hateflow.de/"
-
 load_dotenv()
 bot = commands.Bot(
     # set up the bot

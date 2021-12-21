@@ -13,6 +13,9 @@ torch.set_num_threads(os.cpu_count())
 
 
 def load(path, max_lines=10000):
+    """
+    Load a dataset.
+    """
     df = pd.read_csv(path)[-max_lines:]
     x = df['comment_text']
     y = df[[i for i in LABELS]]
@@ -20,6 +23,14 @@ def load(path, max_lines=10000):
 
 
 def evaluate_label(x_test, y_test, label_index, label, model):
+    """
+    Evaluate the performance of a particular label and print the evaluation.
+    :param x_test: x data from the testset
+    :param y_test: y data from the testset
+    :param label_index: index of the evaluated label
+    :param label: name of the label
+    :param model: model to evaluate
+    """
     print(label)
 
     if label_index is None:
@@ -44,6 +55,10 @@ def evaluate_label(x_test, y_test, label_index, label, model):
 
 
 def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False):
+    """
+    Train a Neural Network.
+    """
+    # network structure
     input_dimensions, hidden = 200, 100
     model = torch.nn.Sequential(
         torch.nn.Linear(input_dimensions, hidden),
@@ -56,6 +71,7 @@ def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False)
     optimizer = torch.optim.Adam(model.parameters())
 
     train_losses, test_losses = [], []
+    # training loop
     for i in range(n_epochs):
         if evaluate and i and not i % 500:
             print("#" * 20, "EVALUATION", "#" * 20)
@@ -66,6 +82,8 @@ def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False)
                 print()
             evaluate_label(x_test, y_test, slice(None), "any", model)
             print("#" * 52)
+
+        # forward phase
         y_pred = model(x_train)
         loss = loss_fn(y_pred, y_train)
         train_losses.append(loss.item())
@@ -73,12 +91,14 @@ def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False)
         test_losses.append(test_loss)
         print(f"{i:3}   train: {loss.item():.6f}   test: {test_loss:.6f}")
 
+        # backward phase
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
     torch.save(model.state_dict(), "models/nn.pt")
 
+    # plot the training process
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.yscale("log")
@@ -91,9 +111,13 @@ def train_model(x_train, y_train, x_test, y_test, n_epochs=1500, evaluate=False)
 
 
 def evaluate_label_threshold(model, x_test_true, y_test_true, x_test_false, y_test_false, label_index, plot=False):
+    """
+    Find an optimal threshold for a label using exhaustive search.
+    """
     true_scores = dict()
     false_scores = dict()
 
+    # try out different thresholds
     for i in range(1001):
         threshold = i / 1000
 
@@ -103,6 +127,7 @@ def evaluate_label_threshold(model, x_test_true, y_test_true, x_test_false, y_te
         y_false_pred = (model(x_test_false)[:, label_index] > threshold) * 1
         false_scores[threshold] = accuracy_score(y_test_false[:, label_index], y_false_pred)
 
+    # evaluate and print the results
     best_threshold = max(true_scores.keys(), key=lambda k: true_scores[k] + false_scores[k])
     print(f"    best threshold: {best_threshold}")
 
@@ -111,6 +136,7 @@ def evaluate_label_threshold(model, x_test_true, y_test_true, x_test_false, y_te
     print(f"    --> unweighted average: {best_score:.4f}")
 
     if plot:
+        # plot a threshold-score chart
         label = LABELS[label_index]
         plt.plot([best_threshold, best_threshold], [0, 1],
                  label=f"best score: {best_score:.3f} using threshold {best_threshold}")
@@ -128,6 +154,9 @@ def evaluate_label_threshold(model, x_test_true, y_test_true, x_test_false, y_te
 
 
 def evaluate_model(model: torch.nn.Sequential, x_test: torch.tensor, y_test: torch.tensor):
+    """
+    Print out an evaluation of the accuracy of every label.
+    """
     print("#" * 20, "EVALUATION", "#" * 20)
     for label_index, label in enumerate(LABELS):
         print(label)
@@ -153,6 +182,10 @@ def evaluate_model(model: torch.nn.Sequential, x_test: torch.tensor, y_test: tor
 
 
 def main():
+    """
+    Load a dataset, train a Neural Network and evaluate the performance.
+    :return:
+    """
     print("Loading dataset...")
 
     x_test, y_test = load("test_pretty.csv", max_lines=DATASET_LINES)

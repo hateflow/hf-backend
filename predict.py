@@ -2,6 +2,7 @@ import torch
 
 from word2vec import process_chunk, LABELS
 
+# determined during the training process, see training_log.txt
 DEFAULT_THRESHOLDS = {
     'identity_hate': 0.023,
     'insult': 0.045,
@@ -13,6 +14,11 @@ DEFAULT_THRESHOLDS = {
 
 
 def predict(params: dict) -> (dict, list, list, int):
+    """
+    Predict the applying labels of a comment.
+    :param params: API parameters
+    :return: results dictionary, error list, warnings list, HTTP response code
+    """
     results, errors, warnings = dict(), previous_errors.copy(), []
 
     text = params.get('text')
@@ -30,8 +36,10 @@ def predict(params: dict) -> (dict, list, list, int):
                         "Set 'probabilities' to False for using thresholds.")
 
     try:
+        # calculate a vector using Word2Vec
         vectorized, removed_indices = process_chunk([text])
         if vectorized:
+            # process it using the Neural Network
             vectorized = torch.tensor(vectorized, dtype=torch.float32)
             y_pred = model(vectorized)
             for label_index, label in enumerate(LABELS):
@@ -53,6 +61,7 @@ current_dir = "/".join(__file__.split("/")[:-1])
 previous_errors = []
 
 try:
+    # load the Neural Network
     input_dimensions, hidden = 200, 100
     model = torch.nn.Sequential(
         torch.nn.Linear(input_dimensions, hidden),

@@ -68,4 +68,4 @@ This will start the bot in read mode. If you want to reply to detected comments,
 3. Try running it: `python3 reddit.py`
 
 This will start the bot in read mode for the Subreddit "me_irl". If you want to reply to detected comments, uncomment 
-the last line of `scan_for_comments` in `reddit.py`. You can customize the Subreddit or Post at the bottom of the file
+the last line of `process_comments` in `reddit.py`. You can customize the Subreddit or Post at the bottom of the file

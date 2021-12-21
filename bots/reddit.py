@@ -1,19 +1,16 @@
+import os
 import time
 
 import praw
 from dotenv import load_dotenv
 
 from bots.bots_base import process_message
-import os
 
 
-def scan_comment(url):  # scanning all comments of one post
-    reddit = login()
-    submission = reddit.submission(url=url)
-    scan_for_comments(submission)
-
-
-def scan_for_comments(submission):  # scanning all comments of one post
+def process_comments(submission):
+    """
+    Check all given comments using the HateFlow API and reply if needed.
+    """
     submission.comments.replace_more(limit=None)
     flat_comments = submission.comments.list()  # all comments of submission
     print("There are " + str(len(flat_comments)) + " comments to scan.")
@@ -25,17 +22,25 @@ def scan_for_comments(submission):  # scanning all comments of one post
             # comment.reply(response)
 
 
-def scan_subreddit(subName):  # scanning all posts of one subreddit
+def scan_post(url):
+    """scanning all comments of one post"""
+    reddit = login()
+    submission = reddit.submission(url=url)
+    process_comments(submission)
+
+
+def scan_subreddit(subName):
+    """scanning the 2 hottest submissions of a subreddit"""
     reddit = login()
     subreddit = reddit.subreddit(subName)
-    for submission in subreddit.hot(limit=2):  # chooses the 2 hottest submissions of subreddit
+    for submission in subreddit.hot(limit=2):
         print("-------------------------submission-------------------------")
         print("r/" + subName)
         print("title: " + submission.title)  # Output: the submission's title
         print("id: " + str(submission.id))  # Output: the submission's ID
         time.sleep(2)  # max requests with Reddit API: 1 per 2 seconds
         print("--------------------------comments--------------------------")
-        scan_for_comments(submission)
+        process_comments(submission)
 
 
 def login():
@@ -51,5 +56,5 @@ def login():
     return reddit
 
 
-# scan_comment("https://www.reddit.com/r/me_irl/comments/qs6stp/me_irl/")  # scan_comment("Link to post")
-scan_subreddit("me_irl")  # scan the 2 hottest submissions of a specific subreddit
+# scan_post("https://www.reddit.com/r/me_irl/comments/qs6stp/me_irl/")  # scan a specific post
+scan_subreddit("me_irl")  # scan the 2 hottest posts of a specific subreddit
