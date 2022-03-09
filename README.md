@@ -1,5 +1,5 @@
 # HateFlow backend
-HateFlow can detect and classify inappropriate comments. It is available using an API documented [here](http://docs.hateflow.de).
+HateFlow can detect and classify inappropriate comments. It is available using an API documented [here](https://docs.hateflow.de).
 ## Installation
 (tested on Ubuntu 20.04 and Python 3.8)
 
@@ -46,26 +46,3 @@ Apache has to be set up according to the system specific requirements.
                 CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
 ```
-
-# Social Media Bots
-## Installation
-```bash
-cd hateflow/bots
-pip3 install -r requirements.txt
-```
-## Twitch
-1. Create an account on twitch.
-2. Request an oauth code and update bots/.env accordingly.
-3. Try running it: `python3 twitch.py`
-
-This will start the bot in read mode. If you want to reply to detected comments, uncomment the last line of
-`event_message` in `twitch.py`.
-
-
-## Reddit
-1. Create an account on reddit.
-2. Create a [reddit application](https://ssl.reddit.com/prefs/apps/) and update bots/.env accordingly.
-3. Try running it: `python3 reddit.py`
-
-This will start the bot in read mode for the Subreddit "me_irl". If you want to reply to detected comments, uncomment 
-the last line of `process_comments` in `reddit.py`. You can customize the Subreddit or Post at the bottom of the file
